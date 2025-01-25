@@ -14,24 +14,28 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
 
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
+      - name: Restore dependencies
+        run: dotnet restore jwt_deploy_solution_2/jwt_deploy_solution_2.sln
 
-      - name: dotnet publish
-        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
+      - name: Build the solution
+        run: dotnet build jwt_deploy_solution_2/jwt_deploy_solution_2.sln --configuration Release
+
+      - name: Publish the application
+        run: dotnet publish jwt_deploy_solution_2/jwt_API_project/jwt_API_project.csproj -c Release -o "${{ runner.temp }}/myapp"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          path: ${{ runner.temp }}/myapp
 
   deploy:
     runs-on: windows-latest
@@ -61,5 +65,5 @@ jobs:
         with:
           app-name: 'jwtdeploy'
           slot-name: 'Production'
-          package: .
+          package: ${{ runner.temp }}/myapp
           
