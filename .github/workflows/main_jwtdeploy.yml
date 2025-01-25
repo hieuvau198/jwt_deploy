@@ -35,7 +35,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: ${{ runner.temp }}/myapp
+          path: ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
     runs-on: windows-latest
@@ -65,5 +65,5 @@ jobs:
         with:
           app-name: 'jwtdeploy'
           slot-name: 'Production'
-          package: ${{ runner.temp }}/myapp
+          package: .
           
