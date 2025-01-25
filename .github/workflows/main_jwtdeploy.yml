@@ -14,7 +14,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout code #Chat edit from: []
         uses: actions/checkout@v4
 
       - name: Set up .NET Core
@@ -22,20 +22,20 @@ jobs:
         with:
           dotnet-version: '8.x'
 
-      - name: Restore dependencies
+      - name: Restore dependencies #Chat edit from: Build with dotnet
         run: dotnet restore jwt_deploy_solution_2/jwt_deploy_solution_2.sln
 
-      - name: Build the solution
+      - name: Build the solution #Chat edit from: dotnet publish 
         run: dotnet build jwt_deploy_solution_2/jwt_deploy_solution_2.sln --configuration Release
 
-      - name: Publish the application
+      - name: Publish the application #Chat edit from: dotnet publish 
         run: dotnet publish jwt_deploy_solution_2/jwt_API_project/jwt_API_project.csproj -c Release -o "${{ runner.temp }}/myapp"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: ${{ runner.temp }}/myapp
+          path: ${{ runner.temp }}/myapp #Chat edit from: ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
     runs-on: windows-latest
