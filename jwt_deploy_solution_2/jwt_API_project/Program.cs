@@ -43,8 +43,20 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "JWT API v1");
+        c.RoutePrefix = string.Empty; // Opens Swagger at the root URL
+    });
 }
+
+// Enable Swagger in production
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "JWT API v1");
+    c.RoutePrefix = string.Empty; // Opens Swagger at the root URL
+});
 
 app.UseHttpsRedirection();
 
